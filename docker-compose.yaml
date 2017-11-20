@@ -17,6 +17,8 @@ services:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
+    volumes:
+      - ./static:/opt/static
     ports:
       - '8080:80'
 
