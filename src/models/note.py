@@ -1,18 +1,39 @@
-class NoteModel:
-    def __init__(self, title, message, hash=None):
-        self.title = title
-        self.message = message
+from src.models.common import BaseModel
+
+from src.store import redis_client
+
+
+class Note(BaseModel):
+    key = 'note:{hash}'
+    client = redis_client
+
+    def __init__(self, title=None, message=None, views=None, created=None, expire=None, hash=None):
         self.hash = hash
 
+        self.title = title
+        self.message = message
 
-class Note:
-    key = 'note:{hash}'
+        self.views = views
 
-    def __init__(self, client):
-        self.client = client
+        self.created = created
+        self.expire = expire
 
+    @staticmethod
+    def form_key(self, hash):
+        return self.key.format(hash=hash)
+
+    @staticmethod
     def get(self, hash):
         self.client.get('')
 
-    def post(self):
+    @staticmethod
+    def set(self, hash, data):
+        pass
+
+    @staticmethod
+    def delete(self, hash):
+        pass
+
+    @staticmethod
+    def patch(self, hash, data):
         pass

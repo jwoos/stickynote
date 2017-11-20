@@ -1,14 +1,14 @@
 import hashlib
 
 
-def hash(title, message, length=12):
+def hash(title, message, length=0):
     sha256 = hashlib.sha256()
     sha256.update(title.encode())
     sha256.update(message.encode())
 
     digest = sha256.hexdigest()[:]
 
-    length = min(length, len())
+    length = min(length, len(digest)) or len(digest)
 
     return digest[:length]
 

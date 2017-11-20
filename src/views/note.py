@@ -4,16 +4,16 @@ from src.store import redis_client
 
 
 class NoteView(MethodView):
-    def get(self):
+    def get(self, hash):
         pass
 
     def post(self):
         pass
 
-    def patch(self):
+    def patch(self, hash):
         pass
 
-    def delete(self):
+    def delete(self, hash):
         pass
 
 
