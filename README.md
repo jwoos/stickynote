@@ -1,4 +1,4 @@
-# Ephemeral Notes
+# Stick Note
 
 ## What is this?
 A service that will allow you to have notes that expire after a set period of time! You can either post anonymously or by providing a password so you can edit and delete it later on. No guarantees are made about keeping notes or auth users around as they are all stored in memory. Redis will start ejecting keys by approximated LRU so when the database is running out of memory, everything is fair game.
