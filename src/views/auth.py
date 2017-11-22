@@ -1,6 +1,6 @@
 from flask.views import MethodView
 
-from src.store import redis_client
+from src.models import Auth, Note
 
 
 class AuthView(MethodView):

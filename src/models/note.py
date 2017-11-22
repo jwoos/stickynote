@@ -6,10 +6,10 @@ from src.models.common import BaseModel
 class Note(BaseModel):
     key = 'note:{hash}'
     schema = {
-        'hash': BaseModel.compose_de_serializer(DEFAULT_DE_SERIALIZER),
-        'title': BaseModel.compose_de_serializer(DEFAULT_DE_SERIALIZER),
-        'message': BaseModel.compose_de_serializer(DEFAULT_DE_SERIALIZER),
-        'created': ([datetime.timestamp, str, str.encode], [bytes.decode, datetime.fromtimestamp])
+        'hash': BaseModel.compose_de_serializer(BaseModel.DEFAULT_DE_SERIALIZER),
+        'title': BaseModel.compose_de_serializer(BaseModel.DEFAULT_DE_SERIALIZER),
+        'message': BaseModel.compose_de_serializer(BaseModel.DEFAULT_DE_SERIALIZER),
+        'created': ([datetime.timestamp, str, str.encode], [bytes.decode, datetime.fromtimestamp]),
         'expire': ([datetime.timestamp, str, str.encode], [bytes.decode, datetime.fromtimestamp])
     }
 

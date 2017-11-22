@@ -3,10 +3,9 @@ import hashlib
 import random
 
 
-def hash(title, message, length=0):
+def hash(data, length=0):
     sha256 = hashlib.sha256()
-    sha256.update(title.encode())
-    sha256.update(message.encode())
+    sha256.update(data.encode())
     sha256.update(str(random.randint(1000000000)))
 
     digest = sha256.hexdigest()[:]
@@ -36,3 +35,29 @@ def random_string_generator(length=8, count=10):
 
         yield x
         current += 1
+
+    def dict_encode(schema, data):
+        raw_data = {}
+
+        for k, constructor in schema.items():
+            _, deserializer = constructor
+
+            if deserializer:
+                raw_data[k.encode()] = deserializer(data[k])
+            else:
+                raw_data[k.encode()] = data[k]
+
+        return raw_data
+
+    def dict_decode(schema, raw_data):
+        data = {}
+
+        for k, constructor in schema.items():
+            serializer, _ = constructor
+
+            if serializer is not None:
+                data[k.decode()] = serializer(raw_data[k])
+            else:
+                data[k.decode()] = raw_data[k]
+
+        return data
