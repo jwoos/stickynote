@@ -1,3 +1,4 @@
+import functools
 import hashlib
 import random
 
@@ -13,6 +14,12 @@ def hash(title, message, length=0):
     length = min(length, len(digest)) or len(digest)
 
     return digest[:length]
+
+def compose(*functions):
+    def _compose(g, f):
+        return lambda *args, **kwargs: f(g(*args, **kwargs))
+
+    return functools.reduce(_compose, functions)
 
 def random_string_generator(length=8, count=10):
     source = string.ascii_letters + string.digits

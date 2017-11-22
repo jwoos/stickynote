@@ -1,11 +1,17 @@
-from src.models.common import BaseModel
+from datetime import datetime
 
-from src.store import redis_client
+from src.models.common import BaseModel
 
 
 class Note(BaseModel):
     key = 'note:{hash}'
-    client = redis_client
+    schema = {
+        'hash': BaseModel.compose_de_serializer(DEFAULT_DE_SERIALIZER),
+        'title': BaseModel.compose_de_serializer(DEFAULT_DE_SERIALIZER),
+        'message': BaseModel.compose_de_serializer(DEFAULT_DE_SERIALIZER),
+        'created': ([datetime.timestamp, str, str.encode], [bytes.decode, datetime.fromtimestamp])
+        'expire': ([datetime.timestamp, str, str.encode], [bytes.decode, datetime.fromtimestamp])
+    }
 
     def __init__(self, title=None, message=None, views=None, created=None, expire=None, hash=None):
         self.hash = hash
@@ -13,43 +19,9 @@ class Note(BaseModel):
         self.title = title
         self.message = message
 
-        self.views = views
-
         self.created = created
         self.expire = expire
 
-    @staticmethod
-    def form_key(hash):
-        return Note.key.format(hash=hash)
-
-    @staticmethod
-    def get(hash):
-        return Note.client.hmget(Note.form_key(hash))
-
-    @staticmethod
-    def set(hash, data):
-        return Note.client.hmset(Note.form_key(hash), data)
-
-    @staticmethod
-    def delete(hash):
-        return Note.client.delete(Note.form_key(hash))
-
-    @staticmethod
-    def patch(hash, data):
-        pass
-
-    @staticmethod
-    def keys(hash):
-        return Note.client.hkeys(hash)
-
-    @staticmethod
-    def get_key(hash, key):
-        return Note.client.hget(Note.form_key(hash))
-
-    @staticmethod
-    def set_key(hash, key, data):
-        return Note.client.hset(Note.form_key(hash), key, data)
-
-    @staticmethod
-    def delete_key(hash, key):
-        return Note.client.hdel(Note.form_key(hash), key)
+    @classmethod
+    def form_key(cls, hash):
+        return cls.key.format(hash=hash)
