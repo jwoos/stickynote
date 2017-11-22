@@ -19,21 +19,37 @@ class Note(BaseModel):
         self.expire = expire
 
     @staticmethod
-    def form_key(self, hash):
-        return self.key.format(hash=hash)
+    def form_key(hash):
+        return Note.key.format(hash=hash)
 
     @staticmethod
-    def get(self, hash):
-        self.client.get('')
+    def get(hash):
+        return Note.client.hmget(Note.form_key(hash))
 
     @staticmethod
-    def set(self, hash, data):
+    def set(hash, data):
+        return Note.client.hmset(Note.form_key(hash), data)
+
+    @staticmethod
+    def delete(hash):
+        return Note.client.delete(Note.form_key(hash))
+
+    @staticmethod
+    def patch(hash, data):
         pass
 
     @staticmethod
-    def delete(self, hash):
-        pass
+    def keys(hash):
+        return Note.client.hkeys(hash)
 
     @staticmethod
-    def patch(self, hash, data):
-        pass
+    def get_key(hash, key):
+        return Note.client.hget(Note.form_key(hash))
+
+    @staticmethod
+    def set_key(hash, key, data):
+        return Note.client.hset(Note.form_key(hash), key, data)
+
+    @staticmethod
+    def delete_key(hash, key):
+        return Note.client.hdel(Note.form_key(hash), key)

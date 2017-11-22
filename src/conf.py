@@ -1,5 +1,5 @@
 REDIS = {
-    'host': 'cache',
+    'host': 'redis',
     'port': '6379',
     'db': 0
 }

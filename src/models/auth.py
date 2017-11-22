@@ -18,21 +18,37 @@ class Auth(BaseModel):
         self.expire = expire
 
     @staticmethod
-    def form_key(self, hash):
-        return self.key.format(hash=hash)
+    def form_key(hash):
+        return Auth.key.format(hash=hash)
 
     @staticmethod
-    def get(self, hash):
+    def get(hash):
+        return Auth.client.hmget(Auth.form_key(hash))
+
+    @staticmethod
+    def set(hash, data):
+        return Auth.client.hmset(Auth.form_key(hash), data)
+
+    @staticmethod
+    def delete(hash):
+        return Auth.client.delete(Auth.form_key(hash))
+
+    @staticmethod
+    def patch(hash, data):
         pass
 
     @staticmethod
-    def set(self, hash, data):
-        pass
+    def keys(hash):
+        return Auth.client.hkeys(hash)
 
     @staticmethod
-    def delete(self, hash):
-        pass
+    def get_key(hash, key):
+        return Auth.client.hget(Auth.form_key(hash))
 
     @staticmethod
-    def patch(self, hash, data):
-        pass
+    def set_key(hash, key, data):
+        return Auth.client.hset(Auth.form_key(hash), key, data)
+
+    @staticmethod
+    def delete_key(hash, key):
+        return Auth.client.hdel(Auth.form_key(hash), key)

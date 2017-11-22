@@ -1,2 +1,2 @@
-import .note.NoteView
-import .auth.AuthView
+from src.views.auth import AuthView, AuthNoteView
+from src.views.note import NoteView
