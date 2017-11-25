@@ -6,11 +6,11 @@ from src.models.common import BaseModel
 class Auth(BaseModel):
     key = 'auth:{hash}'
     schema = {
-        'hash': BaseModel.compose_de_serializer(BaseModel.DEFAULT_DE_SERIALIZER),
-        'password': BaseModel.compose_de_serializer(BaseModel.DEFAULT_DE_SERIALIZER),
-        'notes': ([lambda x: '-'.join(x), str.encode], [bytes.decode, lambda x: x.split('-')]),
-        'created': ([datetime.timestamp, str, str.encode], [bytes.decode, datetime.fromtimestamp]),
-        'expire': ([datetime.timestamp, str, str.encode], [bytes.decode, datetime.fromtimestamp])
+        'hash': (None, None),
+        'password': (None, None),
+        'notes': ([lambda x: '-'.join(x)], [lambda x: x.split('-')]),
+        'created': ([datetime.timestamp], [datetime.fromtimestamp]),
+        'expire': ([datetime.timestamp], [datetime.fromtimestamp])
     }
 
     def __init__(self, password=None, notes=None, created=None, expire=None, hash=None):
@@ -26,3 +26,13 @@ class Auth(BaseModel):
     @staticmethod
     def form_key(hash):
         return Auth.key.format(hash=hash)
+
+    @staticmethod
+    def init_base():
+        return {
+            'hash': '',
+            'title': '',
+            'notes': '',
+            'created': '',
+            'expire': ''
+        }

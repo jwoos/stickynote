@@ -6,7 +6,7 @@ import random
 def hash(data, length=0):
     sha256 = hashlib.sha256()
     sha256.update(data.encode())
-    sha256.update(str(random.randint(1000000000)))
+    sha256.update(str(random.randint(0, 1000000000)).encode())
 
     digest = sha256.hexdigest()[:]
 
@@ -36,28 +36,34 @@ def random_string_generator(length=8, count=10):
         yield x
         current += 1
 
-    def dict_encode(schema, data):
-        raw_data = {}
+def dict_encode(schema, data):
+    raw_data = {}
 
-        for k, constructor in schema.items():
-            _, deserializer = constructor
+    for k, constructor in schema.items():
+        serializer, _ = constructor
 
-            if deserializer:
-                raw_data[k.encode()] = deserializer(data[k])
-            else:
-                raw_data[k.encode()] = data[k]
+        if data.get(k) is None:
+            continue
 
-        return raw_data
+        if serializer:
+            raw_data[k] = serializer(data[k])
+        else:
+            raw_data[k] = data[k]
 
-    def dict_decode(schema, raw_data):
-        data = {}
+    return raw_data
 
-        for k, constructor in schema.items():
-            serializer, _ = constructor
+def dict_decode(schema, raw_data):
+    data = {}
 
-            if serializer is not None:
-                data[k.decode()] = serializer(raw_data[k])
-            else:
-                data[k.decode()] = raw_data[k]
+    for k, constructor in schema.items():
+        _, deserializer = constructor
 
-        return data
+        if raw_data.get(k) is None:
+            continue
+
+        if deserializer is not None:
+            data[k] = deserializer(raw_data[k])
+        else:
+            data[k] = raw_data[k]
+
+    return data

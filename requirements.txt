@@ -1,4 +1,5 @@
 Flask
 cerberus
+hiredis
 redis
 uwsgi

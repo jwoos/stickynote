@@ -6,11 +6,11 @@ from src.models.common import BaseModel
 class Note(BaseModel):
     key = 'note:{hash}'
     schema = {
-        'hash': BaseModel.compose_de_serializer(BaseModel.DEFAULT_DE_SERIALIZER),
-        'title': BaseModel.compose_de_serializer(BaseModel.DEFAULT_DE_SERIALIZER),
-        'message': BaseModel.compose_de_serializer(BaseModel.DEFAULT_DE_SERIALIZER),
-        'created': ([datetime.timestamp, str, str.encode], [bytes.decode, datetime.fromtimestamp]),
-        'expire': ([datetime.timestamp, str, str.encode], [bytes.decode, datetime.fromtimestamp])
+        'hash': (None, None),
+        'title': (None, None),
+        'message': (None, None),
+        'created': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp]),
+        'expire': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp])
     }
 
     def __init__(self, title=None, message=None, views=None, created=None, expire=None, hash=None):
@@ -25,3 +25,13 @@ class Note(BaseModel):
     @classmethod
     def form_key(cls, hash):
         return cls.key.format(hash=hash)
+
+    @staticmethod
+    def init_base():
+        return {
+            'hash': '',
+            'title': '',
+            'message': '',
+            'created': '',
+            'expire': ''
+        }

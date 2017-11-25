@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
 from src.store import redis_client
-from src.utils import compose
+from src.utils import compose, dict_encode, dict_decode
 
 
 class BaseModel(ABC):
-    DEFAULT_DE_SERIALIZER = ([str, str.encode], [bytes.decode])
+    # (serializer, deserializer)
     key = None
     client = redis_client
     schema = {}
@@ -21,16 +21,18 @@ class BaseModel(ABC):
 
     @classmethod
     def compose_de_serializer(cls, serializer_fns=[], deserializer_fns=[]):
-        serializer, deserializer = cls.DEFAULT_DE_SERIALIZER
-        return (compose(*serializer_fns, *serializer), compose(*deserializer, *deserializer_fns))
+        return (compose(*serializer_fns), compose(*deserializer_fns))
 
     @classmethod
     def get(cls, hash):
-        return cls.client.hgetall(cls.form_key(hash))
+        raw_data = cls.client.hgetall(cls.form_key(hash))
+        data = dict_decode(cls.schema, raw_data)
+        return data
 
     @classmethod
     def set(cls, hash, data):
-        return cls.client.hmset(cls.form_key(hash), data)
+        raw_data = dict_encode(cls.schema, data)
+        return cls.client.hmset(cls.form_key(hash), raw_data)
 
     @classmethod
     def delete(cls, hash):
