@@ -28,5 +28,7 @@ class NoteView(MethodView):
         Note.set(data['hash'], data)
         return jsonify(data), 201
 
-    def delete(self, hash):
-        pass
+    def delete(self, note_hash):
+        Note.delete(note_hash)
+
+        return jsonify(None), 204

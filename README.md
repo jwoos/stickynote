@@ -8,14 +8,6 @@ A service that will allow you to have notes that expire after a set period of ti
 
 `/note/<note_hash>/`: GET, PATCH, DELETE
 
-`/auth/`: POST
-
-`/auth/<auth_hash>/`: GET, DELETE
-
-`/auth/<auth_hash>/note/`: GET, DELETE
-
-`/auth/<auth_hash>/note/<note_hash>`: GET, PATCH, DELETE
-
 ## Run
 The following will build the containers as well running them if you've never run it before:
 ```bash
@@ -30,7 +22,7 @@ docker-compose build
 ## Architecture
 ```
 Flask app (uWSGI) <---> NGINX <---> Client (API)
-             /static <---/ \---> Client (Site)
+            /static <--->/ \<---> Client (Site)
 ```
 I chose to run the API and the site separately and do API calls rather than bundling in rendering and what not.
 

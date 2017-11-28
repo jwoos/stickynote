@@ -9,6 +9,9 @@ class Note(BaseModel):
         'hash': (None, None),
         'title': (None, None),
         'message': (None, None),
+        'password': (None, None),
+        'editable': (None, None),
+        'readable': (None, None),
         'created': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp]),
         'expire': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp])
     }
@@ -32,6 +35,9 @@ class Note(BaseModel):
             'hash': '',
             'title': '',
             'message': '',
+            'password': '',
+            'editable': '',
+            'readable': '',
             'created': '',
             'expire': ''
         }
