@@ -18,14 +18,17 @@ class NoteView(MethodView):
         return jsonify(data), 200
 
     def post(self):
-        data = Note.init_base()
-        request_data = request.get_json()
+        data = request.get_json()
         # TODO validate
-        data.update(request_data)
+
+        now = datetime.now()
+
         data['hash'] = hash(data['title'] + data['message'])
-        data['created'] = datetime.now()
-        data['expire'] = datetime.now()
+        data['created'] = now
+        data['expire'] = now
+
         Note.set(data['hash'], data)
+
         return jsonify(data), 201
 
     def delete(self, note_hash):

@@ -31,6 +31,9 @@ class BaseModel(ABC):
 
     @classmethod
     def set(cls, hash, data):
+        _data = cls.init_base()
+        _data.update(data)
+        data = _data
         raw_data = dict_encode(cls.schema, data)
         return cls.client.hmset(cls.form_key(hash), raw_data)
 
