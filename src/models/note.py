@@ -3,6 +3,11 @@ from datetime import datetime
 from src.models.common import BaseModel
 
 
+note_schema = {
+
+}
+
+
 class Note(BaseModel):
     key = 'note:{hash}'
 
@@ -12,7 +17,7 @@ class Note(BaseModel):
         'message': (None, None),
         'password': (None, None),
         'access': (None, None),
-        'editable': (None, None),
+        'readonly': (None, None),
         'private': (None, None),
         'created': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp]),
         'updated': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp]),
@@ -31,7 +36,7 @@ class Note(BaseModel):
 
         self.password = password
         self.access = access
-        self.editable = editable
+        self.readonly = readonly
         self.private = private
 
         self.created = created
@@ -50,7 +55,7 @@ class Note(BaseModel):
             'message': '',
             'password': '',
             'access': '',
-            'editable': '',
+            'readonly': '',
             'private': '',
             'created': '',
             'updated': '',
