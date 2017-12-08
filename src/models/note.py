@@ -3,8 +3,70 @@ from datetime import datetime
 from src.models.common import BaseModel
 
 
-note_schema = {
+note_post_schema = {
+    'title': {
+        'type': 'string',
+        'required': False,
+        'nullable': True
+    },
+    'message': {
+        'type': 'string',
+        'required': True,
+        'nullable': True
+    },
+    'password': {
+        'type': 'string',
+        'required': False,
+        'nullable': False
+    },
+    'readonly': {
+        'type': 'boolean',
+        'required': False,
+        'nullable': False
+    },
+    'private': {
+        'type': 'boolean',
+        'required': False,
+        'nullable': False
+    },
+    'expire': {
+        'type': 'datetime',
+        'required': False,
+        'nullable': False
+    }
+}
 
+note_patch_schema = {
+    'title': {
+        'type': 'string',
+        'required': False,
+        'nullable': False
+    },
+    'message': {
+        'type': 'string',
+        'required': False,
+        'nullable': False
+    },
+    'password': {
+        'type': 'string',
+        'required': False,
+        'nullable': False
+    },
+    'readonly': {
+        'type': 'boolean',
+        'required': False,
+        'nullable': False
+    },
+    'private': {
+        'type': 'boolean',
+        'required': False,
+        'nullable': False
+    },
+    'expire': {
+        'type': 'datetime',
+        'required': False,
+        'nullable': False
+    }
 }
 
 
@@ -16,9 +78,8 @@ class Note(BaseModel):
         'title': (None, None),
         'message': (None, None),
         'password': (None, None),
-        'access': (None, None),
-        'readonly': (None, None),
-        'private': (None, None),
+        'readonly': BaseModel.compose_de_serializer([int], [bool]),
+        'private': BaseModel.compose_de_serializer([int], [bool]),
         'created': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp]),
         'updated': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp]),
         'expire': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp])
@@ -35,7 +96,6 @@ class Note(BaseModel):
         self.message = message
 
         self.password = password
-        self.access = access
         self.readonly = readonly
         self.private = private
 
@@ -54,10 +114,9 @@ class Note(BaseModel):
             'title': '',
             'message': '',
             'password': '',
-            'access': '',
             'readonly': '',
             'private': '',
-            'created': '',
-            'updated': '',
-            'expire': ''
+            'created': None,
+            'updated': None,
+            'expire': None
         }

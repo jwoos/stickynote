@@ -4,8 +4,10 @@ from flask import request
 from flask.json import jsonify
 from flask.views import MethodView
 
-from src.models import Note
+from src.errors import NotFoundError, UnauthorizedError, ForbiddenError
+from src.models.note import Note, note_post_schema, note_patch_schema
 from src.utils import hash
+from src.validator import validate_data
 
 
 class NoteView(MethodView):
@@ -13,54 +15,56 @@ class NoteView(MethodView):
         note = Note.get(note_hash)
 
         if note is None:
-            return jsonify({'error': 'resource note {} not found'.format(note_hash)}), 404
+            raise NotFoundError('the resource does not exist')
 
         if note['private']:
             password = request.args.get('password')
 
             if not password:
-                return jsonify({'error': 'the resource you requested needs a password'}), 401
+                raise UnauthorizedError('the resource needs a password')
             elif note['password'] != password:
-                return jsonify({'error': 'the resource password does not match'}), 403
+                raise ForbiddenError('the resource password does not match')
 
-        return jsonify(data), 200
+        return jsonify(note), 200
 
     def post(self):
         data = request.get_json()
-        # TODO validate
+
+        validate_data(note_post_schema, data, strict=True)
 
         now = datetime.now()
 
         data['hash'] = hash(data['title'] + data['message'])
         data['created'] = now
-        data['expire'] = now
 
         Note.set(data['hash'], data)
 
-        return jsonify(data), 201
+        return jsonify(Note.get(data['hash'])), 201
 
     def patch(self, note_hash):
         data = request.get_json()
-        # TODO validate
+
+        validate_data(note_patch_schema, data, strict=True)
 
         if note is None:
-            return jsonify('error': 'resource note {} not found'.format(note_hash)) 404
+            raise NotFoundError('the resource does not exist')
 
         now = datetime.now()
+
         note = Note.get(note_hash)
 
         if note['private']:
             password = request.args.get('password')
 
             if not password:
-                return jsonify({'error': 'the resource you requested needs a password'}), 401
+                raise UnauthorizedError('the resource needs a password')
             elif note['password'] != password:
-                return jsonify({'error': 'the resource password does not match'}), 403
+                raise ForbiddenError('the resource password does not match')
         elif note['readonly']:
-            return jsonify({'error': 'the resource is locked'}), 403
+            raise ForbiddenError('the resource is locked')
 
         note.update(data)
-        note.updated = now
+        note['updated'] = now
 
         Note.set(note_hash, note)
 
@@ -70,17 +74,17 @@ class NoteView(MethodView):
         note = Note.get(note_hash)
 
         if note is None:
-            return jsonify('error': 'resource note {} not found'.format(note_hash)) 404
+            raise NotFoundError('the resource does not exist')
 
         if note['private']:
             password = request.args.get('password')
 
             if not password:
-                return jsonify({'error': 'the resource you requested needs a password'}), 401
+                raise UnauthorizedError('the resource needs a password')
             elif note['password'] != password:
-                return jsonify({'error': 'the resource password does not match'}), 403
+                raise ForbiddenError('the resource password does not match')
         elif note['readonly']:
-            return jsonify({'error': 'the resource is locked'}), 403
+            raise ForbiddenError('the resource is locked')
 
         Note.delete(note_hash)
 
