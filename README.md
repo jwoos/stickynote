@@ -4,9 +4,36 @@
 A service that will allow you to have notes that expire after a set period of time! You can either post anonymously or by providing a password so you can edit and delete it later on. No guarantees are made about keeping notes or auth users around as they are all stored in memory. Redis will start ejecting keys by approximated LRU so when the database is running out of memory, everything is fair game.
 
 ## API
-`/notes`: POST
+`/notes`
 
-`/notes/<note_hash>`: GET, PATCH, DELETE
+### POST
+```json
+{
+	"title": <string | nullable>,
+	"message": <string | required | nullable>,
+	"password": <string>,
+	"readonly": <boolean>,
+	"private": <boolean>,
+	"expire": <string-datetime>
+}
+```
+
+`/notes/<note_hash>`
+### GET
+
+### PATCH
+```json
+{
+	"title": <string>,
+	"message": <string>,
+	"password": <string>,
+	"readonly": <boolean>,
+	"private": <boolean>,
+	"expire": <string-datetime>
+}
+```
+
+### DELETE
 
 ## Run
 The following will build the containers as well running them if you've never run it before:
