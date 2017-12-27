@@ -4,7 +4,7 @@ from flask import request
 from flask.json import jsonify
 from flask.views import MethodView
 
-from src.errors import NotFoundError, UnauthorizedError, ForbiddenError
+from src.errors import NotFoundError, UnauthorizedError, ForbiddenError, ValidationError
 from src.models.note import Note, note_post_schema, note_patch_schema
 from src.utils import hash
 from src.validator import validate_data
@@ -29,6 +29,9 @@ class NoteView(MethodView):
 
     def post(self):
         data = request.get_json()
+
+        if not data:
+            raise ValidationError('data cannot be empty')
 
         validate_data(note_post_schema, data, strict=True)
 

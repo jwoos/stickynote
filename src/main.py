@@ -10,19 +10,25 @@ app = Flask(__name__)
 
 
 def default_error_handler(error):
+    code = getattr(error, 'code', None) or 500
     try:
-        context = jsonify(error.get_body())
-        code = error.code
+        context = jsonify({
+            'error': {
+                'description': getattr(error, 'message', None) or getattr(error, 'description', None) or str(error),
+                'code': code
+            }
+        })
     except:
         context = jsonify({
             'error': {
-                'description': getattr(error, 'message') or getattr(error, 'description') or str(error),
-                'code': getattr(error, 'status_code') or getattr(error, 'code') or 500
+                'description': error.get_body(),
+                'code': code,
             }
         })
 
     return context, code
 
+print(default_exceptions)
 for code, error in default_exceptions.items():
     app.register_error_handler(error, default_error_handler)
 
