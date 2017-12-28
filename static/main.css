@@ -1,9 +1,12 @@
 body {
-	padding-top: 54px;
+	height: 100vh;
 }
 
-@media (min-width: 992px) {
-	body {
-		padding-top: 56px;
-	}
+.container, .row {
+	height: 100%;
+}
+
+.card-header p, .card-footer p {
+	margin: 0;
+	display: inline-block;
 }
