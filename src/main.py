@@ -28,7 +28,6 @@ def default_error_handler(error):
 
     return context, code
 
-print(default_exceptions)
 for code, error in default_exceptions.items():
     app.register_error_handler(error, default_error_handler)
 
