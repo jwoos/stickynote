@@ -78,8 +78,8 @@ class Note(BaseModel):
         'title': (None, None),
         'message': (None, None),
         'password': (None, None),
-        'readonly': BaseModel.compose_de_serializer([int], [bool]),
-        'private': BaseModel.compose_de_serializer([int], [bool]),
+        'readonly': BaseModel.compose_de_serializer([int], [int, bool]),
+        'private': BaseModel.compose_de_serializer([int], [int, bool]),
         'created': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp]),
         'updated': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp]),
         'expire': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp])
@@ -114,8 +114,8 @@ class Note(BaseModel):
             'title': '',
             'message': '',
             'password': '',
-            'readonly': '',
-            'private': '',
+            'readonly': False,
+            'private': False,
             'created': None,
             'updated': None,
             'expire': None

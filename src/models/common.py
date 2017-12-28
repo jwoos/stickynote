@@ -25,8 +25,10 @@ class BaseModel(ABC):
 
     @classmethod
     def get(cls, hash):
+        data = cls.init_base()
         raw_data = cls.client.hgetall(cls.form_key(hash))
-        data = dict_decode(cls.schema, raw_data)
+        _data = dict_decode(cls.schema, raw_data)
+        data.update(_data)
         return data
 
     @classmethod
