@@ -44,7 +44,7 @@ class BaseModel(ABC):
         return cls.client.delete(cls.form_key(hash))
 
     @classmethod
-    def expire_at(cls, timestamp):
+    def expire_at(cls, hash, timestamp):
         return cls.client.expireat(cls.form_key(hash), timestamp)
 
     @classmethod
