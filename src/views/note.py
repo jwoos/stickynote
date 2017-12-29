@@ -41,6 +41,7 @@ class NoteView(MethodView):
         data['created'] = now
 
         Note.set(data['hash'], data)
+        Note.expire_at(data['expire'])
 
         return jsonify(Note.get(data['hash'])), 201
 
@@ -70,6 +71,7 @@ class NoteView(MethodView):
         note['updated'] = now
 
         Note.set(note_hash, note)
+        Note.expire_at(data['expire'])
 
         return jsonify(note), 200
 
