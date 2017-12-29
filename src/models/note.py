@@ -30,7 +30,7 @@ note_post_schema = {
         'nullable': False
     },
     'expire': {
-        'type': 'datetime',
+        'type': 'integer',
         'required': False,
         'nullable': False
     }
@@ -63,7 +63,7 @@ note_patch_schema = {
         'nullable': False
     },
     'expire': {
-        'type': 'datetime',
+        'type': 'integer',
         'required': False,
         'nullable': False
     }
@@ -80,9 +80,9 @@ class Note(BaseModel):
         'password': (None, None),
         'readonly': BaseModel.compose_de_serializer([int], [int, bool]),
         'private': BaseModel.compose_de_serializer([int], [int, bool]),
-        'created': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp]),
-        'updated': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp]),
-        'expire': BaseModel.compose_de_serializer([datetime.timestamp], [float, datetime.fromtimestamp])
+        'created': BaseModel.compose_de_serializer([int], [int]),
+        'updated': BaseModel.compose_de_serializer([int], [int]),
+        'expire': BaseModel.compose_de_serializer([int], [int])
     }
 
     validation_schema = {

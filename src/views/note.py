@@ -35,7 +35,7 @@ class NoteView(MethodView):
 
         validate_data(note_post_schema, data, strict=True)
 
-        now = datetime.now()
+        now = int(datetime.now().timestamp())
 
         data['hash'] = hash(data['title'] + data['message'])
         data['created'] = now
@@ -49,12 +49,12 @@ class NoteView(MethodView):
 
         validate_data(note_patch_schema, data, strict=True)
 
-        if note is None:
-            raise NotFoundError('the resource does not exist')
-
-        now = datetime.now()
+        now = int(datetime.now().timestamp())
 
         note = Note.get(note_hash)
+
+        if note is None:
+            raise NotFoundError('the resource does not exist')
 
         if note['private']:
             password = request.args.get('password')
